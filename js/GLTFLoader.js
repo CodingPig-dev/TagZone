@@ -1,3 +1,11 @@
+// 📦 GLTFLoader – Three.js Extension
+// This file was downloaded from the official Three.js repository:
+// https://github.com/mrdoob/three.js/blob/dev/examples/jsm/loaders/GLTFLoader.js
+
+// 🧩 GLTFLoader is used to load .glb and .gltf 3D models into the scene.
+// It parses geometry, materials, animations, and more.
+
+// 💡 Note: This file is included locally in the project and not loaded via CDN.
 ( function () {
 
     class GLTFLoader extends THREE.Loader {
@@ -4087,4 +4095,5 @@
     THREE.GLTFLoader = GLTFLoader;
 
 } )();
+
 
