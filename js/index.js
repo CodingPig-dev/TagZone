@@ -1,3 +1,13 @@
+// 🎮 TagZone – Lasertag Game
+// This project uses Three.js for 3D rendering and scene management.
+// https://threejs.org/
+
+// 📦 Three.js is used to:
+// - Create and manage the 3D scene
+// - Render objects like players, lasers, and environment
+// - Handle camera movement and lighting
+
+// 💡 Note: Three.js is loaded via a CDN and partially from local files in index.html
 let keyboardActive = false;
 let controllerActive = false;
 
