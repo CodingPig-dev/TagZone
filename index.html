@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: black;
+            width: 100vw;
+            height: 100vh;
+        }
+        video {
+            width: 100vw;
+            height: calc(100vh - 40px);
+            object-fit: cover;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<video id="videoPlayer" style="display:block;">
+    <source src="assets/video.mp4" type="video/mp4">
+    Dein Browser unterstützt das Video-Tag nicht.
+</video>
+<footer style="position:fixed;bottom:0;left:0;width:100vw;height:40px;background:rgba(30,30,40,0.85);color:#fff;z-index:100;display:flex;align-items:center;justify-content:center;font-family:sans-serif;font-size:1em;">
+    <a href="imprint.html" style="color:#fff;text-decoration:underline;margin:0 16px;">Imprint</a>
+    <span style="color:#fff;">|</span>
+    <a href="privacypolicy.html" style="color:#fff;text-decoration:underline;margin:0 16px;">Privacy Policy</a>
+    <a href="aboutmusik.html" style="color:#fff;margin:0 16px;">Musik : Lensko - Let's Go! | House | NCS - Copyright Free Music</a>
+</footer>
+<script>
+    const video = document.getElementById("videoPlayer");
+    document.addEventListener("click", function() {
+        video.currentTime = 0;
+        video.play();
+    }, { once: true });
+    video.addEventListener("ended", function() {
+        window.location.href = "menu.html";
+    });
+</script>
+</body>
+</html>

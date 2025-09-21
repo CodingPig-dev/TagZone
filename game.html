@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Main</title>
+    <style>
+        html, body {
+            overflow: hidden !important;
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            background: transparent !important;
+            box-sizing: border-box;
+        }
+    </style>
+    <script>
+        window.onload = function() {
+            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.matchMedia("(pointer: coarse)").matches) {
+                window.scrollTo(0, 0);
+            } else {
+                // Desktop: wie bisher mittig scrollen
+                document.body.scrollLeft = document.body.scrollWidth;
+                document.body.scrollTop = (document.body.scrollHeight - window.innerHeight) / 2;
+                window.scrollTo(document.body.scrollWidth, (document.body.scrollHeight - window.innerHeight) / 2);
+            }
+        };
+    </script>
+</head>
+<body>
+<div id="ranking" style="position:fixed;top:20px;right:20px;z-index:10;background:rgba(30,30,40,0.85);color:#fff;padding:16px;border-radius:8px;min-width:180px;font-family:sans-serif;box-shadow:0 2px 8px #000;">
+    <h3 style="margin-top:0">Leaderboard</h3>
+    <ul id="rankingList" style="list-style:none;padding:0;margin:0"></ul>
+</div>
+<div id="respawnOverlay" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.3);z-index:100;align-items:center;justify-content:center;font-family:sans-serif;color:#fff;font-size:2em;text-align:center">
+    <div>
+        <p>You have been shot!</p>
+        <p id="respawnTimer">Active again in ...</p>
+    </div>
+</div>
+<script>
+    function setRespawnOverlayPointerEvents() {
+        var overlay = document.getElementById('respawnOverlay');
+        if (!overlay) return;
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.matchMedia("(pointer: coarse)").matches) {
+            overlay.style.pointerEvents = 'none';
+        } else {
+            overlay.style.pointerEvents = 'auto';
+        }
+    }
+    window.addEventListener('DOMContentLoaded', setRespawnOverlayPointerEvents);
+</script>
+<div id="joystickLeft" style="position:fixed;bottom:40px;left:40px;width:120px;height:120px;z-index:20;touch-action:none;display:none;">
+    <div id="joystickLeftCircle" style="width:120px;height:120px;border-radius:60px;background:rgba(80,80,80,0.35);border:2px solid #aaa;position:absolute;left:0;top:0;"></div>
+    <div id="joystickLeftKnob" style="width:48px;height:48px;border-radius:24px;background:rgba(200,200,255,0.7);border:2px solid #fff;position:absolute;left:36px;top:36px;"></div>
+</div>
+<div id="joystickRight" style="position:fixed;bottom:40px;right:40px;width:120px;height:120px;z-index:20;touch-action:none;display:none;">
+    <div id="joystickRightCircle" style="width:120px;height:120px;border-radius:60px;background:rgba(80,80,80,0.35);border:2px solid #aaa;position:absolute;left:0;top:0;"></div>
+    <div id="joystickRightKnob" style="width:48px;height:48px;border-radius:24px;background:rgba(255,200,200,0.7);border:2px solid #fff;position:absolute;left:36px;top:36px;"></div>
+</div>
+<button id="sprintBtn" style="position:fixed;top:40px;left:40px;z-index:30;width:56px;height:56px;border-radius:50%;background:#ffecb3;color:#222;border:none;box-shadow:0 2px 8px #000;display:flex;align-items:center;justify-content:center;font-size:2em;padding:0;">
+    <span style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;">
+        &#9889;
+    </span>
+</button>
+<button id="lighterBtn" style="position:fixed;top:40px;left:110px;z-index:30;width:56px;height:56px;border-radius:50%;background:#eee;color:#222;border:none;box-shadow:0 2px 8px #000;display:flex;align-items:center;justify-content:center;font-size:2em;padding:0;">
+    <span id="lighterIcon" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;">
+        &#9728;
+    </span>
+</button>
+<button id="perspectiveBtn" style="position:fixed;top:40px;left:180px;z-index:30;width:56px;height:56px;border-radius:50%;background:#444;color:#fff;border:none;box-shadow:0 2px 8px #000;display:flex;align-items:center;justify-content:center;font-size:2em;padding:0;">
+    <span style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;">
+        &#128065;
+    </span>
+</button>
+<img id="gunOverlay" src="assets/imgs/gun.png" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:15;pointer-events:none;display:none;object-fit:cover;" />
+<audio id="backgroundMusic" src="assets/musik.mp3" loop style="display:none"></audio>
+<script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+<script src="js/GLTFLoader.js"></script>
+<script src="js/RGBELoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/cannon@0.6.2/build/cannon.min.js"></script>
+<script src="js/bots.js"></script>
+<script src="js/index.js"></script>
+<script>
+    function playMusic() {
+        var audio = document.getElementById('backgroundMusic');
+        if (audio && audio.paused) {
+            audio.volume = 0.5;
+            audio.play();
+        }
+    }
+    window.addEventListener('DOMContentLoaded', function() {
+        var audio = document.getElementById('backgroundMusic');
+        if (audio) {
+            var playAttempted = false;
+            function tryPlay() {
+                if (!playAttempted) {
+                    playAttempted = true;
+                    playMusic();
+                }
+            }
+            playMusic();
+            document.body.addEventListener('click', tryPlay, { once: true });
+        }
+    });
+</script>
+<footer style="position:fixed;bottom:0;left:0;width:100vw;height:40px;background:rgba(30,30,40,0.85);color:#fff;z-index:100;display:flex;align-items:center;justify-content:center;font-family:sans-serif;font-size:1em;">
+    <a href="imprint.html" style="color:#fff;text-decoration:underline;margin:0 16px;">Imprint</a>
+    <span style="color:#fff;">|</span>
+    <a href="privacypolicy.html" style="color:#fff;text-decoration:underline;margin:0 16px;">Privacy Policy</a>
+    <a href="aboutmusik.html" style="color:#fff;margin:0 16px;">Musik : Lensko - Let's Go! | House | NCS - Copyright Free Music</a>
+</footer>
+</body>
+</html>
