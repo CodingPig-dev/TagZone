@@ -384,13 +384,7 @@ const groundTexture = new THREE.TextureLoader().load('assets/imgs/ground.png', f
         }
     }
 });
-cameraMode = cameraMode === "third" ? "first" : "third";
-        e.preventDefault();
-        if (cameraMode === "first") {
-            enablePointerLock();
-        } else {
-            disablePointerLock();
-        }
+
 groundTexture.wrapS = THREE.RepeatWrapping;
 groundTexture.wrapT = THREE.RepeatWrapping;
 groundTexture.repeat.set(2, 2);
@@ -465,6 +459,14 @@ let playerAngle = 0;
 let cameraMode = "third";
 let pointerLockActive = false;
 let cameraPitch = 0;
+
+cameraMode = cameraMode === "third" ? "first" : "third";
+        e.preventDefault();
+        if (cameraMode === "first") {
+            enablePointerLock();
+        } else {
+            disablePointerLock();
+        }
 
 function enablePointerLock() {
     if (!pointerLockActive) {
