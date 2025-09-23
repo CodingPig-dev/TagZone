@@ -456,7 +456,7 @@ window.addEventListener('keyup', (e) => {
 });
 
 let playerAngle = 0;
-let cameraMode = first";
+let cameraMode = third";
 let pointerLockActive = false;
 let cameraPitch = 0;
 
