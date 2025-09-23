@@ -456,17 +456,11 @@ window.addEventListener('keyup', (e) => {
 });
 
 let playerAngle = 0;
-let cameraMode = "third";
+let cameraMode = first";
 let pointerLockActive = false;
 let cameraPitch = 0;
 
-cameraMode = cameraMode === "third" ? "first" : "third";
-        e.preventDefault();
-        if (cameraMode === "first") {
-            enablePointerLock();
-        } else {
-            disablePointerLock();
-        }
+
 
 function enablePointerLock() {
     if (!pointerLockActive) {
